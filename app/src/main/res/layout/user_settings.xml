@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent" android:layout_width="match_parent">
+
+    <PreferenceCategory android:title="Settings" >
+        <EditTextPreference
+            android:title="Question Data URL"
+            android:summary="Enter the URL to use for question data"
+            android:key="url"
+            android:id="@+id/urlPref"/>
+        <EditTextPreference
+            android:title="Alarm Frequency"
+            android:summary="Choose how often you want to be reminded in minutes."
+            android:key="alarmFrequency"
+            android:inputType="number"
+            android:id="@+id/frequencyPref"/>
+    </PreferenceCategory>
+</PreferenceScreen>

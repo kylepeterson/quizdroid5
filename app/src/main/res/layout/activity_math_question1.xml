@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="quizdroid.kylep9.washington.edu.quizdroid.MathQuestion1">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight=".333333">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="How Many Pi Are In a Circle?"
+            android:textSize="20dp"
+            android:gravity="center|center_vertical"
+            android:background="#6699CC"
+            android:textColor="#FFFFFF"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:id="@+id/question"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight=".333333">
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/mathoptions">
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1 Pi"
+                android:textSize="30dp"
+                android:paddingTop="5dp"
+                android:id="@+id/ans1"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2 Pi"
+                android:textSize="30dp"
+                android:paddingTop="5dp"
+                android:id="@+id/ans2"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="2 Pie"
+                android:textSize="30dp"
+                android:paddingTop="5dp"
+                android:id="@+id/ans3"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="4 Pi"
+                android:textSize="30dp"
+                android:paddingTop="5dp"
+                android:id="@+id/ans4"/>
+        </RadioGroup>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight=".333333">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Submit"
+            android:id="@+id/mathq1submit"
+            android:textSize="40dp"
+            android:background="#003366"
+            android:textColor="#FFFFFF" />
+    </RelativeLayout>
+</LinearLayout>
