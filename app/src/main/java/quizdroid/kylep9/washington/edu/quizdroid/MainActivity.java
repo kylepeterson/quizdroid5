@@ -98,7 +98,7 @@ public class MainActivity extends ActionBarActivity {
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         int interval = Integer.parseInt(sharedPrefs.getString("alarmFrequency", "1"));
         pendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, 0);
-        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 7000, pendingIntent);
+        manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), interval * 1000 * 60, pendingIntent);
         Toast.makeText(MainActivity.this, "Alarm Set", Toast.LENGTH_SHORT).show();
     }
 

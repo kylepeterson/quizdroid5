@@ -14,12 +14,32 @@ public class Topic implements Serializable{
     private List<Quiz> questions;
     private int currentQuestion;
 
+    public Topic() {
+        this(null, null, null, null);
+    }
+
     public Topic(String title, String shortDesc, String longDesc, List<Quiz> questions) {
         this.title = title;
         this.shortDesc = shortDesc;
         this.longDesc = longDesc;
         this.questions = questions;
         currentQuestion = 0;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setShortDesc(String shortDesc) {
+        this.shortDesc = shortDesc;
+    }
+
+    public void setLongDesc(String longDesc) {
+        this.longDesc = longDesc;
+    }
+
+    public void setQuestions(List<Quiz> questions) {
+        this.questions = questions;
     }
 
     public String getTitle() {

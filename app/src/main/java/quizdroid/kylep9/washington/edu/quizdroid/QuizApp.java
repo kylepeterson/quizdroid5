@@ -1,13 +1,12 @@
 package quizdroid.kylep9.washington.edu.quizdroid;
 
 import android.app.Application;
+import android.util.JsonReader;
 import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +29,12 @@ public class QuizApp extends Application {
         Log.i("application", "QuizApp loaded and run");
     }
 
-    public static void initInstance(SimpleTopicRepo repo) {
+    public  void initInstance(SimpleTopicRepo repo) {
         if(instance == null) {
+
             instance = new QuizApp(repo);
         }
+
     }
 
     public static QuizApp getInstance() {
@@ -52,14 +53,7 @@ public class QuizApp extends Application {
     }
 
     public SimpleTopicRepo createTopicRepo() {
-        String inputString = loadJSON();
-        try {
-            JSONObject topics = new JSONObject(inputString);
-
-        } catch(JSONException e) {
-
-        }
-        Map<String, Topic> map = new HashMap<String, Topic>();
+        /*Map<String, Topic> map = new HashMap<String, Topic>();
         //Math
         String[] a1 = {"1 Pi", "2 Pi", "2 Pie", "4 Pi"};
         Quiz q1 = new Quiz("How many pis are in a circle?", a1, 1);
@@ -106,24 +100,99 @@ public class QuizApp extends Application {
                 "Marvel is is an American publisher of comic books and related media.", mquestions);
         map.put("Marvel Superheroes", marvelTopic);
 
-        // Create new repo containing all topics
-        SimpleTopicRepo repo = new SimpleTopicRepo(map);
+        // Create new repo containing all topics*/
+        SimpleTopicRepo repo = readJSON();
         return repo;
     }
 
-    private String loadJSON() {
-        String json = null;
+    public SimpleTopicRepo readJSON() {
+        Map<String, Topic> jsonMap = new HashMap<String, Topic>();
         try {
-            InputStream input = getAssets().open("quizdata.json");
-            int size = input.available();
-            byte[] buffer = new byte[size];
-            input.read(buffer);
-            input.close();
-            json = new String(buffer, "UTF-8");
-        } catch(IOException e) {
-            return null;
-        }
-        return json;
+            InputStream is = getAssets().open("quizdata.json");
+            InputStreamReader isReader = new InputStreamReader(is);
 
+            JsonReader reader = new JsonReader(isReader);
+            List<Topic> topics = parseJSON(reader);
+            for(Topic t: topics) {
+                jsonMap.put(t.getTitle(), t);
+            }
+            is.close();
+            isReader.close();
+        } catch(IOException e) {
+            Log.i("json", e.getMessage());
+        }
+        SimpleTopicRepo jsonRepo = new SimpleTopicRepo(jsonMap);
+        return jsonRepo;
     }
+
+    public List<Topic> parseJSON(JsonReader reader) throws IOException{
+        List<Topic> topics = new ArrayList<Topic>();
+        reader.beginArray();
+        Log.i("json", "started reading topic array");
+        while(reader.hasNext()) {
+            Topic result = parseTopic(reader);
+            Log.i("json", "resulting topic: " + result.getTitle());
+            topics.add(result);
+        }
+        reader.endArray();
+        Log.i("json", "finished reading topic array");
+        return topics;
+    }
+
+    public Topic parseTopic(JsonReader reader) throws IOException {
+        Topic currentTopic = new Topic();
+        reader.beginObject();
+        if (reader.nextName().equals("title")) {
+            currentTopic.setTitle(reader.nextString());
+            Log.i("json", "\tresulting title: " + currentTopic.getTitle());
+
+        }
+        if (reader.nextName().equals("desc")) {
+            currentTopic.setLongDesc(reader.nextString());
+            Log.i("json", "\tresulting desc: " + currentTopic.getLongDesc());
+
+        }
+        if (reader.nextName().equals("questions")) {
+            List<Quiz> questions = new ArrayList<Quiz>();
+            reader.beginArray();
+            while (reader.hasNext()) {
+                questions.add(parseQuestion(reader));
+            }
+            reader.endArray();
+            currentTopic.setQuestions(questions);
+        }
+        reader.endObject();
+        return currentTopic;
+    }
+
+    public Quiz parseQuestion(JsonReader reader) throws IOException {
+        reader.beginObject();
+        Quiz question = new Quiz();
+        if(reader.nextName().equals("text")) {
+            question.setQuestion(reader.nextString());
+            Log.i("json", "\t\tresulting question: " + question.getQuestion());
+
+        }
+        if(reader.nextName().equals("answer")) {
+            question.setCorrectIndex(Integer.parseInt(reader.nextString()));
+            Log.i("json", "\t\tresulting answer index: " + question.getCorrectIndex());
+
+        }
+        if(reader.nextName().equals("answers")) {
+            reader.beginArray();
+            List<String> answers = new ArrayList<String>();
+            while(reader.hasNext()) {
+                answers.add(reader.nextString());
+            }
+            reader.endArray();
+            String[] answersArr = answers.toArray(new String[answers.size()]);
+
+            question.setAnswers(answersArr);
+            Log.i("json", "\t\tresulting answers: " + question.getAnswers());
+
+        }
+        reader.endObject();
+        return question;
+    }
+
 }

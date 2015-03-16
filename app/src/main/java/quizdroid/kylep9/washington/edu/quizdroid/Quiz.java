@@ -10,9 +10,25 @@ public class Quiz implements Serializable {
     private String[] answers;
     private int correctIndex;
 
+    public Quiz() {
+        this(null, null, 0);
+    }
+
     public Quiz(String question, String[] answers, int correctIndex) {
         this.question = question;
         this.answers = answers;
+        this.correctIndex = correctIndex;
+    }
+
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public void setAnswers(String[] answers) {
+        this.answers = answers;
+    }
+
+    public void setCorrectIndex(int correctIndex) {
         this.correctIndex = correctIndex;
     }
 
